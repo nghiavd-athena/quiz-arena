@@ -767,6 +767,206 @@ input[type='text']::placeholder {
   }
 }
 
+/* ── Review Screen ────────────────────────────────────────────────────── */
+#review-screen {
+  align-items: center;
+}
+
+.review-container {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-header {
+  text-align: center;
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.review-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--purple-light), var(--blue-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#review-subtitle {
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slide-in 0.3s ease both;
+}
+
+.review-card.review-correct {
+  border-left-color: var(--accent-green);
+}
+
+.review-card.review-wrong {
+  border-left-color: var(--accent-red);
+}
+
+.review-card.review-skipped {
+  border-left-color: var(--text-muted);
+}
+
+.review-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.review-q-num {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 24px;
+}
+
+.review-badges {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.review-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgba(167, 139, 250, 0.12);
+  color: var(--purple-light);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+}
+
+.review-diff-easy {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--accent-green);
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.review-diff-medium {
+  background: rgba(234, 179, 8, 0.12);
+  color: var(--accent-yellow);
+  border-color: rgba(234, 179, 8, 0.25);
+}
+
+.review-diff-hard {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--accent-red);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.review-result {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  margin-left: auto;
+}
+
+.review-result-correct {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--accent-green);
+}
+
+.review-result-wrong {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+}
+
+.review-result-skipped {
+  background: rgba(71, 85, 105, 0.3);
+  color: var(--text-muted);
+}
+
+.review-question {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.review-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.review-ans {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  background: #0d0d1a;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.review-ans-correct {
+  border-color: var(--accent-green);
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.review-ans-wrong {
+  border-color: var(--accent-red);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--accent-red);
+  text-decoration: line-through;
+  opacity: 0.85;
+}
+
+.review-explanation {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--purple-mid);
+  padding: 10px 14px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.review-time {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.review-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 24px;
+}
+
 /* ── Responsive ───────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
   .card {

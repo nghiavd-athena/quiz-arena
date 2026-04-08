@@ -6,13 +6,22 @@ A single-page quiz web app with gamification features. Pure HTML/CSS/JS — no b
 
 ## Running
 
-Open `index.html` directly in a browser (no server needed).
+Requires a local HTTP server (fetch blocks `file://` URLs in most browsers):
+
+```
+npx serve .
+# or
+python3 -m http.server
+```
+
+Then open the URL shown (e.g. `http://localhost:3000`).
 
 ## Architecture
 
 - `index.html` — shell, all screens live here as hidden `<section>` elements
 - `src/style.css` — dark theme, animations, responsive layout
-- `src/questions.js` — question bank array, loaded before app.js
+- `data/questions.json` — question bank (questions, categories, difficulties); fetched by app.js at init
+- `src/questions.js` — Node.js adapter for tests; reads data/questions.json via require()
 - `src/app.js` — all game logic, state machine, localStorage leaderboard
 
 ## Screens (sections)
@@ -37,7 +46,7 @@ Central mutable object in `app.js`. Never stored globally on `window`. Mutated b
 ## NEVER
 
 - Do not import npm packages
-- Do not modify questions.js structure without updating the category filter logic in app.js
+- Do not modify data/questions.json structure without updating the category filter logic in app.js
 - Do not store sensitive data in localStorage (scores only)
 
 ## Verification

@@ -1,8 +1,14 @@
 // Quiz Arena — Game Logic
-// Requires: questions.js loaded first (provides QUESTIONS, CATEGORIES, DIFFICULTIES)
+// Fetches question data from data/questions.json on init.
 
-;(() => {
+;(async () => {
   'use strict'
+
+  const {
+    questions: QUESTIONS,
+    categories: CATEGORIES,
+    difficulties: DIFFICULTIES
+  } = await fetch('data/questions.json').then((r) => r.json())
 
   // ── Constants ────────────────────────────────────────────────────────────
   const POINTS_PER_QUESTION = 10
@@ -17,6 +23,7 @@
     start: document.getElementById('start-screen'),
     game: document.getElementById('game-screen'),
     results: document.getElementById('results-screen'),
+    review: document.getElementById('review-screen'),
     leaderboard: document.getElementById('leaderboard-screen')
   }
 
@@ -52,8 +59,15 @@
     statTime: document.getElementById('stat-time'),
     statStreak: document.getElementById('stat-streak'),
     playAgainBtn: document.getElementById('play-again-btn'),
+    resultsReviewBtn: document.getElementById('results-review-btn'),
     resultsLeaderboardBtn: document.getElementById('results-leaderboard-btn'),
     confettiCanvas: document.getElementById('confetti-canvas'),
+
+    // Review
+    reviewSubtitle: document.getElementById('review-subtitle'),
+    reviewList: document.getElementById('review-list'),
+    reviewBackBtn: document.getElementById('review-back-btn'),
+    reviewPlayAgainBtn: document.getElementById('review-play-again-btn'),
 
     // Leaderboard
     leaderboardList: document.getElementById('leaderboard-list'),
@@ -286,7 +300,7 @@
       updateStreakDisplay()
     }
 
-    state.answers.push({ correct: isCorrect, timeUsed })
+    state.answers.push({ correct: isCorrect, timeUsed, chosen: chosenOrig })
 
     // Advance after brief pause
     setTimeout(() => nextQuestion(), 900)
@@ -316,7 +330,7 @@
       if (!state.answered) {
         state.answered = true
         state.streak = 0
-        state.answers.push({ correct: false, timeUsed: state.timerDuration })
+        state.answers.push({ correct: false, timeUsed: state.timerDuration, chosen: null })
         updateStreakDisplay()
 
         // Reveal correct
@@ -546,6 +560,61 @@
     requestAnimationFrame(draw)
   }
 
+  // ── showReviewScreen ──────────────────────────────────────────────────────
+  function showReviewScreen() {
+    const correctCount = state.answers.filter((a) => a.correct).length
+    const total = state.answers.length
+    el.reviewSubtitle.textContent = `${correctCount} of ${total} correct · ${state.playerName}`
+
+    el.reviewList.innerHTML = ''
+    state.questions.forEach((q, i) => {
+      const ans = state.answers[i]
+      const isTimeout = ans.chosen === null
+      const statusClass = ans.correct
+        ? 'review-correct'
+        : isTimeout
+          ? 'review-skipped'
+          : 'review-wrong'
+      const resultLabel = ans.correct ? '✓ Correct' : isTimeout ? '— Time up' : '✗ Wrong'
+      const resultMod = ans.correct ? 'correct' : isTimeout ? 'skipped' : 'wrong'
+
+      const catObj = CATEGORIES.find((c) => c.id === q.category)
+      const diffObj = DIFFICULTIES.find((d) => d.id === q.difficulty)
+
+      const answersHtml = q.answers
+        .map((text, idx) => {
+          let cls = 'review-ans'
+          if (idx === q.correct) cls += ' review-ans-correct'
+          else if (!isTimeout && idx === ans.chosen) cls += ' review-ans-wrong'
+          return `<div class="${cls}">${escapeHtml(text)}</div>`
+        })
+        .join('')
+
+      const timeLabel = isTimeout ? 'Timed out' : `${ans.timeUsed.toFixed(1)}s`
+
+      const card = document.createElement('div')
+      card.className = `review-card ${statusClass}`
+      card.style.animationDelay = `${i * 0.04}s`
+      card.innerHTML = `
+        <div class="review-card-top">
+          <span class="review-q-num">Q${i + 1}</span>
+          <div class="review-badges">
+            <span class="review-badge">${catObj ? catObj.icon + ' ' + catObj.label : q.category}</span>
+            <span class="review-badge review-diff-${q.difficulty}">${diffObj ? diffObj.label : q.difficulty}</span>
+          </div>
+          <span class="review-result review-result-${resultMod}">${resultLabel}</span>
+        </div>
+        <p class="review-question">${escapeHtml(q.question)}</p>
+        <div class="review-answers">${answersHtml}</div>
+        ${q.explanation ? `<p class="review-explanation">${escapeHtml(q.explanation)}</p>` : ''}
+        <div class="review-time">⏱ ${timeLabel}</div>
+      `
+      el.reviewList.appendChild(card)
+    })
+
+    showScreen('review')
+  }
+
   // ── Event Listeners ───────────────────────────────────────────────────────
   el.startBtn.addEventListener('click', startGame)
 
@@ -559,7 +628,13 @@
     showStartScreen()
   })
 
+  el.resultsReviewBtn.addEventListener('click', () => showReviewScreen())
+
   el.resultsLeaderboardBtn.addEventListener('click', () => showLeaderboard('results'))
+
+  el.reviewBackBtn.addEventListener('click', () => showScreen('results'))
+
+  el.reviewPlayAgainBtn.addEventListener('click', () => showStartScreen())
 
   el.lbBackBtn.addEventListener('click', () => {
     if (state.prevScreen === 'results') {

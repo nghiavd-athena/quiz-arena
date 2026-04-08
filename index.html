@@ -118,12 +118,28 @@
 
         <div class="results-actions">
           <button class="btn btn-primary btn-lg" id="play-again-btn">Play Again</button>
-          <button class="btn btn-secondary" id="results-leaderboard-btn">🏆 Leaderboard</button>
+          <button class="btn btn-secondary" id="results-review-btn">📋 Review Answers</button>
+          <button class="btn btn-ghost" id="results-leaderboard-btn">🏆 Leaderboard</button>
         </div>
       </div>
 
       <!-- Confetti canvas -->
       <canvas id="confetti-canvas"></canvas>
+    </section>
+
+    <!-- ── Review Screen ─────────────────────────────────────────────────── -->
+    <section id="review-screen" class="screen">
+      <div class="review-container">
+        <div class="review-header">
+          <h2 class="review-title">Answer Review</h2>
+          <p id="review-subtitle"></p>
+        </div>
+        <div id="review-list" class="review-list"></div>
+        <div class="review-actions">
+          <button class="btn btn-primary btn-lg" id="review-back-btn">Back to Results</button>
+          <button class="btn btn-ghost" id="review-play-again-btn">Play Again</button>
+        </div>
+      </div>
     </section>
 
     <!-- ── Leaderboard Screen ───────────────────────────────────────────── -->
@@ -140,7 +156,6 @@
       </div>
     </section>
 
-    <script src="src/questions.js"></script>
     <script src="src/logic.js"></script>
     <script src="src/app.js"></script>
   </body>
