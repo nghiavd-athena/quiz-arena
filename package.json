@@ -1,0 +1,8 @@
+{
+  "name": "quiz-arena",
+  "version": "1.0.0",
+  "description": "Quiz web app with gamification",
+  "scripts": {
+    "test": "node tests/run.js"
+  }
+}
